@@ -1,0 +1,252 @@
+//Guru99 Login page POM
+
+package pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
+public class Guru99Login {
+
+    WebDriver driver;
+
+    By user99GuruName = By.name("uid");
+    By password99Guru = By.name("password");
+    By titleText = By.className("barone");
+    By login = By.name("btnLogin");
+
+    public Guru99Login(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void setUserName(String strUserName) {
+        driver.findElement(user99GuruName).sendKeys(strUserName);
+    }
+
+    public void setPassword(String strPassword) {
+        driver.findElement(password99Guru).sendKeys(strPassword);
+    }
+
+    public void clickLogin() {
+        driver.findElement(login).click();
+    }
+
+    public String getLoginTitle() {
+        
+        return driver.findElement(titleText).getText();
+    }
+
+    public void loginToGuru99(String strUserName, String strPasword) {
+        this.setUserName(strUserName);
+        this.setPassword(strPasword);
+        this.clickLogin();
+    }
+    }
+
+    _________________________________________________________________
+
+
+    //Guru99 Home Page POM in Selenium
+
+    package pages;
+
+            import org.openqa.selenium.By;
+            import org.openqa.selenium.WebDriver;
+
+    public class Guru99HomePage {
+
+    WebDriver driver;
+
+    By homePageUserName = By.xpath("//table//tr[@class='heading3']");
+
+    public Guru99HomePage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public String getHomePageDashboardUserName() {
+
+        return driver.findElement(homePageUserName).getText();
+    }
+    }
+  
+    _________________________________________________________________
+
+
+    //Guru99 Simple POM in Selenium Test case
+
+    package test;
+
+    import java.util.concurrent.TimeUnit;
+    import org.openqa.selenium.WebDriver;
+    import org.openqa.selenium.firefox.FirefoxDriver;
+    import org.testng.Assert;
+    import org.testng.annotations.BeforeTest;
+    import org.testng.annotations.Test;
+    import pages.Guru99HomePage;
+    import pages.Guru99Login;
+
+    public class Test99GuruLogin {
+
+    String driverPath = "C:\\geckodriver.exe";
+
+    WebDriver driver;
+
+    Guru99Login objLogin;
+    Guru99HomePage objHomePage;
+
+    @BeforeTest
+    public void setup() {
+
+    System.setProperty("webdriver.gecko.driver", driverPath);
+
+    driver = new FirefoxDriver();
+
+    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+    driver.get("http://demo.guru99.com/V4/");
+    }
+
+    @Test(priority = 0)
+    public void test_Home_Page_Appear_Correct() {
+
+    objLogin = new Guru99Login(driver);
+    String loginPageTitle = objLogin.getLoginTitle();
+    Assert.assertTrue(loginPageTitle.toLowerCase().contains("guru99 bank"));
+
+    objLogin.loginToGuru99("mgr123", "mgr!23");
+    objHomePage = new Guru99HomePage(driver);
+    Assert.assertTrue(objHomePage.getHomePageDashboardUserName().toLowerCase().contains("manger id : mgr123"));
+    }
+
+    _________________________________________________________________
+   
+
+    //Guru99 Login page with Page Factory
+
+    package PageFactory;
+
+    import org.openqa.selenium.WebDriver;
+    import org.openqa.selenium.WebElement;
+    import org.openqa.selenium.support.FindBy;
+    import org.openqa.selenium.support.PageFactory;
+
+    public class Guru99Login {
+
+    WebDriver driver;
+
+    @FindBy(name = "uid")
+    WebElement user99GuruName;
+
+    @FindBy(name = "password")
+    WebElement password99Guru;
+
+    @FindBy(className = "barone")
+    WebElement titleText;
+
+    @FindBy(name = "btnLogin")
+    WebElement login;
+
+    public Guru99Login(WebDriver driver) {
+    this.driver = driver;
+    PageFactory.initElements(driver, this);
+    }
+
+    public void setUserName(String strUserName) {
+    user99GuruName.sendKeys(strUserName);
+    }
+
+    public void setPassword(String strPassword) {
+    password99Guru.sendKeys(strPassword);
+    }
+
+    public void clickLogin() {
+    login.click();
+    }
+
+    public String getLoginTitle() {
+    return titleText.getText();
+    }
+
+    public void loginToGuru99(String strUserName, String strPasword) {
+    this.setUserName(strUserName);
+    this.setPassword(strPasword);
+    this.clickLogin();
+    }
+    }
+
+    _________________________________________________________________
+   
+
+    //Guru99 Home Page with Page Factory
+
+    package PageFactory;
+
+    import org.openqa.selenium.WebDriver;
+    import org.openqa.selenium.WebElement;
+    import org.openqa.selenium.support.FindBy;
+    import org.openqa.selenium.support.PageFactory;
+
+    public class Guru99HomePage {
+
+    WebDriver driver;
+
+    @FindBy(xpath = "//table//tr[@class='heading3']")
+    WebElement homePageUserName;
+
+    public Guru99HomePage(WebDriver driver) {
+    this.driver = driver;
+    PageFactory.initElements(driver, this);
+    }
+
+    public String getHomePageDashboardUserName() {
+
+    return homePageUserName.getText();
+    }
+    }
+    
+    _________________________________________________________________    
+
+    //Guru99 TestCase with Page Factory concept
+    package test;
+
+    import java.util.concurrent.TimeUnit;
+    import org.openqa.selenium.WebDriver;
+    import org.openqa.selenium.firefox.FirefoxDriver;
+    import org.testng.Assert;
+    import org.testng.annotations.BeforeTest;
+    import org.testng.annotations.Test;
+    import PageFactory.Guru99HomePage;
+    import PageFactory.Guru99Login;
+
+    public class Test99GuruLoginWithPageFactory {
+
+    String driverPath = "C:\\geckodriver.exe";
+
+    WebDriver driver;
+    Guru99Login objLogin;
+    Guru99HomePage objHomePage;
+
+    @BeforeTest
+    public void setup(){
+
+    System.setProperty("webdriver.gecko.driver", driverPath);
+
+    driver = new FirefoxDriver();
+
+    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+    driver.get("http://demo.guru99.com/V4/");
+    }
+
+    @Test(priority=0)
+
+    public void test_Home_Page_Appear_Correct(){
+
+    objLogin = new Guru99Login(driver);
+    String loginPageTitle = objLogin.getLoginTitle();
+    Assert.assertTrue(loginPageTitle.toLowerCase().contains("guru99 bank"));
+
+    objLogin.loginToGuru99("mgr123", "mgr!23");
+    objHomePage = new Guru99HomePage(driver);
+    Assert.assertTrue(objHomePage.getHomePageDashboardUserName().toLowerCase().contains("manger id : mgr123"));
+    }
+    }
