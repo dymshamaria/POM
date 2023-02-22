@@ -31,7 +31,6 @@ public class Guru99Login {
     }
 
     public String getLoginTitle() {
-        
         return driver.findElement(titleText).getText();
     }
 
@@ -63,7 +62,6 @@ public class Guru99Login {
     }
 
     public String getHomePageDashboardUserName() {
-
         return driver.findElement(homePageUserName).getText();
     }
     }
@@ -198,7 +196,6 @@ public class Guru99Login {
     }
 
     public String getHomePageDashboardUserName() {
-
     return homePageUserName.getText();
     }
     }
